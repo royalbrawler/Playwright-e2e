@@ -1,7 +1,18 @@
-import test, { expect } from "@playwright/test"
+import test, { expect, Page } from "@playwright/test"
 import { Login, VerifySuccessfulLogin } from "../page-object-models/Login"
 
-test("API intercept - print calls", async ({ page }) => {
+let page: Page
+
+test.beforeEach(async ({ browser }) => {
+  const context = await browser.newContext()
+  page = await context.newPage()
+})
+
+test.afterEach(async () => {
+  await page.close()
+})
+
+test("API intercept - print calls", async () => {
   page.on("request", (request) => console.log(">>", request.method(), request.url()))
 
   await page.goto("/")
@@ -11,7 +22,7 @@ test("API intercept - print calls", async ({ page }) => {
   await page.waitForLoadState("networkidle")
 })
 
-test("API intercept - modify images", async ({ page }) => {
+test("API intercept - modify images", async () => {
   const interceptedUrls: string[] = []
 
   // Fetch the SVG once before setting up the route handler

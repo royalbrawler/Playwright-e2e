@@ -1,24 +1,20 @@
-import { test as base, expect, Page, BrowserContext, chromium } from "@playwright/test"
+import { test, expect, Page } from "@playwright/test"
 import * as loginPage from "../page-object-models/Login"
 
 const standard_user_credentials = { username: "standard_user", password: "secret_sauce" }
 
-// Custom test fixture that closes and reopens browser before each test
-const test = base.extend<{ page: Page; context: BrowserContext }>({
-  context: async ({}, use) => {
-    const browser = await chromium.launch()
-    const context = await browser.newContext()
-    await use(context)
-    await context.close()
-    await browser.close()
-  },
-  page: async ({ context }, use) => {
-    const page = await context.newPage()
-    await use(page)
-  },
+let page: Page
+
+test.beforeEach(async ({ browser }) => {
+  const context = await browser.newContext()
+  page = await context.newPage()
 })
 
-test("Resource (*image) block test example", async ({ page }) => {
+test.afterEach(async () => {
+  await page.close()
+})
+
+test("Resource (*image) block test example", async () => {
   await page.route("**/*", (route) => {
     if (route.request().resourceType() === "image") {
       return route.abort()
