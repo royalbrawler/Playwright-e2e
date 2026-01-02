@@ -1,5 +1,5 @@
 import { test as setup, expect } from "@playwright/test"
-import { Login, VerifySuccessfulLogin } from "./page-object-models/Login"
+import { Login, VerifySuccessfulLogin } from "../page-object-models/Login"
 
 const standard_user = { username: "standard_user", password: "secret_sauce" }
 const authFile = "playwright/.auth/user.json"
