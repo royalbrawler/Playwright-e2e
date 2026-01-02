@@ -40,14 +40,20 @@ export default defineConfig({
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },
+    // {
+    //   name: 'chromium',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //   },
+    // },
     {
-      name: 'chromium',
+      name: 'chromium-with-session',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],
-    },
+    }
 
     // {
     //   name: 'firefox',
