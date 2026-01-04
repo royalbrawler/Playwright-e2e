@@ -1,9 +1,5 @@
 import test, { expect } from "@playwright/test"
 
-test.use({
-  baseURL: "https://petstore.swagger.io/v2/",
-})
-
 // Test data
 const testUser = {
   id: 12345,

@@ -1,7 +1,6 @@
 import test, { expect } from "@playwright/test"
 
 test.use({
-  baseURL: "https://petstore.swagger.io/v2/",
   extraHTTPHeaders: { api_key: "special-key" },
 })
 
