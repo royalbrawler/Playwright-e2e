@@ -26,7 +26,6 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'https://demo.nopcommerce.com/',
     baseURL: 'https://www.saucedemo.com/',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -37,8 +36,22 @@ export default defineConfig({
   projects: [
     // Setup project - runs first to authenticate and save session
     {
+      name: 'api-tests',
+      testDir: './tests/api-tests',
+      use: {
+        baseURL: 'https://petstore.swagger.io/v2/',
+        extraHTTPHeaders: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      },
+    },
+    {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
+      use: {
+        baseURL: 'https://www.saucedemo.com/',
+      },
     },
     // {
     //   name: 'chromium',
@@ -48,7 +61,10 @@ export default defineConfig({
     // },
     {
       name: 'chromium-with-session',
+      testDir: './tests',
+      testIgnore: ['**/api-tests/**'],
       use: {
+        baseURL: 'https://www.saucedemo.com/',
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
