@@ -10,7 +10,7 @@ Learning Playwright end-to-end testing with TypeScript.
 |---------|-------------|
 | `petstore-api-tests` | API tests against petstore.swagger.io |
 | `setup-saucedemo` | Authentication setup - saves session to `playwright/.auth/user_saucedemo.json` |
-| `chromium-with-session` | E2E tests on saucedemo.com using saved auth session |
+| `saucedemo-tests` | E2E tests on saucedemo.com using saved auth session |
 
 ## Folder Structure
 
@@ -50,7 +50,7 @@ npx playwright install --with-deps
 npx playwright test
 
 # Run specific project
-npx playwright test --project=chromium-with-session
+npx playwright test --project=saucedemo-tests
 npx playwright test --project=petstore-api-tests
 
 # View test report

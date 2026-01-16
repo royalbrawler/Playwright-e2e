@@ -57,7 +57,7 @@ export default defineConfig({
     },
     // E2E tests on saucedemo.com using saved auth session
     {
-      name: 'chromium-with-session',
+      name: 'saucedemo-tests',
       testDir: './tests/saucedemo/tests',
       use: {
         baseURL: 'https://www.saucedemo.com/',
