@@ -18,7 +18,7 @@ const standard_user_credentials = { username: "standard_user", password: "secret
 test.describe(
   "Single item order tests",
   {
-    tag: "@smoke",
+    tag: "@cart",
   },
   () => {
     test.use({ colorScheme: "dark" }) // Apply dark mode (for the browser context) for all tests in this describe block

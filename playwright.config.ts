@@ -22,7 +22,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['html'], ['list']],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -34,10 +34,10 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Setup project - runs first to authenticate and save session
+    // API tests against petstore.swagger.io
     {
-      name: 'api-tests',
-      testDir: './tests/api-tests',
+      name: 'petstore-api-tests',
+      testDir: './tests/petstore_swagger/api-tests',
       use: {
         baseURL: 'https://petstore.swagger.io/v2/',
         extraHTTPHeaders: {
@@ -46,29 +46,25 @@ export default defineConfig({
         },
       },
     },
+    // Setup project - runs first to authenticate and save session
     {
-      name: 'setup',
+      name: 'setup-saucedemo',
+      testDir: './tests/saucedemo/setup',
       testMatch: /.*\.setup\.ts/,
       use: {
         baseURL: 'https://www.saucedemo.com/',
       },
     },
-    // {
-    //   name: 'chromium',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //   },
-    // },
+    // E2E tests on saucedemo.com using saved auth session
     {
       name: 'chromium-with-session',
-      testDir: './tests',
-      testIgnore: ['**/api-tests/**'],
+      testDir: './tests/saucedemo/tests',
       use: {
         baseURL: 'https://www.saucedemo.com/',
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/user.json',
+        storageState: 'playwright/.auth/user_saucedemo.json',
       },
-      dependencies: ['setup'],
+      dependencies: ['setup-saucedemo'],
     }
 
     // {
