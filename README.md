@@ -12,31 +12,6 @@ Learning Playwright end-to-end testing with TypeScript.
 | `setup-saucedemo` | Authentication setup - saves session to `playwright/.auth/user_saucedemo.json` |
 | `saucedemo-tests` | E2E tests on saucedemo.com using saved auth session |
 
-## Folder Structure
-
-```
-tests/
-├── saucedemo/                      # SauceDemo UI tests
-│   ├── page-object-models/         # POM helper functions
-│   │   ├── Cart.ts
-│   │   ├── Login.ts
-│   │   └── Products.ts
-│   ├── setup/                      # Authentication setup
-│   │   └── auth.setup.ts
-│   └── tests/                      # Test specs
-│       ├── ApiIntercept.spec.ts
-│       ├── Cart.spec.ts
-│       ├── Cart_POM.spec.ts
-│       ├── Login.spec.ts
-│       ├── ResourceBlock.spec.ts
-│       └── Session.spec.ts
-│
-└── petstore_swagger/               # Petstore API tests
-    └── api-tests/
-        ├── store.spec.ts
-        └── user.spec.ts
-```
-
 ## Getting Started
 
 ```bash
