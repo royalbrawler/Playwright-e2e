@@ -40,6 +40,7 @@ export default defineConfig({
       testDir: './tests/petstore_swagger/api-tests',
       use: {
         baseURL: 'https://petstore.swagger.io/v2/',
+        // No Content-Type here: it overrides Playwright's per-request type and breaks form/multipart (415)
         extraHTTPHeaders: {
           'Accept': 'application/json',
         },
