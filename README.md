@@ -6,11 +6,11 @@ Learning Playwright end-to-end testing with TypeScript.
 
 [![Playwright Tests](https://github.com/royalbrawler/Playwright-e2e/actions/workflows/playwright.yml/badge.svg)](https://github.com/royalbrawler/Playwright-e2e/actions/workflows/playwright.yml)
 
-| Project | Description |
-|---------|-------------|
-| `petstore-api-tests` | API tests against petstore.swagger.io |
-| `setup-saucedemo` | Authentication setup - saves session to `playwright/.auth/user_saucedemo.json` |
-| `saucedemo-tests` | E2E tests on saucedemo.com using saved auth session |
+| Project | Folder | Description |
+| ------- | ------ | ----------- |
+| `petstore-api` | `tests/petstore_swagger/` | API tests against petstore.swagger.io |
+| `saucedemo-setup` | `tests/saucedemo/setup/` | Authentication setup - saves session to `playwright/.auth/user_saucedemo.json` |
+| `saucedemo-e2e` | `tests/saucedemo/tests/` | E2E tests on saucedemo.com using saved auth session |
 
 ## Getting Started
 
@@ -24,9 +24,9 @@ npx playwright install --with-deps
 # Run all tests
 npx playwright test
 
-# Run specific project
-npx playwright test --project=saucedemo-tests
-npx playwright test --project=petstore-api-tests
+# Run specific project (saucedemo-e2e runs saucedemo-setup first automatically)
+npx playwright test --project=saucedemo-e2e
+npx playwright test --project=petstore-api
 
 # View test report
 npx playwright show-report

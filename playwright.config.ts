@@ -8,6 +8,11 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+/* One base URL per site. There is no global baseURL: a project that forgets its own
+   fails on the first relative goto/request instead of silently testing another site. */
+const SAUCEDEMO_URL = 'https://www.saucedemo.com/';
+const PETSTORE_URL = 'https://petstore.swagger.io/v2/';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -25,47 +30,69 @@ export default defineConfig({
   reporter: [['html'], ['list']],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'https://www.saucedemo.com/',
+    /* No baseURL here: each site's projects set their own (see the constants above). */
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Projects are grouped per site and named "<site>-<type>", so `--project="<site>*"` selects a whole site */
   projects: [
-    // API tests against petstore.swagger.io
+    // ── petstore.swagger.io ──
+    // API tests (request fixture only, no browser)
     {
-      name: 'petstore-api-tests',
+      name: 'petstore-api',
       testDir: './tests/petstore_swagger/api-tests',
       use: {
-        baseURL: 'https://petstore.swagger.io/v2/',
+        baseURL: PETSTORE_URL,
         // No Content-Type here: it overrides Playwright's per-request type and breaks form/multipart (415)
         extraHTTPHeaders: {
           'Accept': 'application/json',
         },
       },
     },
+
+    // ── saucedemo.com ──
     // Setup project - runs first to authenticate and save session
     {
-      name: 'setup-saucedemo',
+      name: 'saucedemo-setup',
       testDir: './tests/saucedemo/setup',
       testMatch: /.*\.setup\.ts/,
       use: {
-        baseURL: 'https://www.saucedemo.com/',
+        baseURL: SAUCEDEMO_URL,
       },
     },
     // E2E tests on saucedemo.com using saved auth session
     {
-      name: 'saucedemo-tests',
+      name: 'saucedemo-e2e',
       testDir: './tests/saucedemo/tests',
       use: {
-        baseURL: 'https://www.saucedemo.com/',
+        baseURL: SAUCEDEMO_URL,
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user_saucedemo.json',
       },
-      dependencies: ['setup-saucedemo'],
-    }
+      dependencies: ['saucedemo-setup'],
+    },
+
+    // ── Template for a new site: copy, replace "newsite", add a NEWSITE_URL constant at the top,
+    //    and create tests/newsite/{setup,tests} ──
+    // Drop the setup project (and storageState/dependencies) if the site needs no login.
+    // {
+    //   name: 'newsite-setup',
+    //   testDir: './tests/newsite/setup',
+    //   testMatch: /.*\.setup\.ts/,
+    //   use: { baseURL: NEWSITE_URL },
+    // },
+    // {
+    //   name: 'newsite-e2e',
+    //   testDir: './tests/newsite/tests',
+    //   use: {
+    //     baseURL: NEWSITE_URL,
+    //     ...devices['Desktop Chrome'],
+    //     storageState: 'playwright/.auth/user_newsite.json',
+    //   },
+    //   dependencies: ['newsite-setup'],
+    // },
 
     // {
     //   name: 'firefox',
