@@ -54,8 +54,10 @@ test.describe(
         await test.step("Login to the application with valid credentials", async () => {
           await Login(page, standard_user_credentials)
         })
-        // test.step returns its callback's value, so no outer `let` is needed
+        // test.step returns its callback's value
+        // { name, value } from AddProductToCart
         const addedProduct = await test.step("Add product to the cart", () => AddProductToCart(page, 0)) // Add first product
+        
         await test.step("Verify product is added to the cart", async () => {
           await GoToCartPage(page)
           await AssertProduct(page, addedProduct.name!)
