@@ -6,11 +6,8 @@ export async function Login(page: Page, user: { username: string; password: stri
   await page.locator('[data-test="login-button"]').click()
 }
 
-export async function VerifySuccessfulLogin(page: Page, errorMsg?: any, addExpectOptions = {}) {
-  if (!errorMsg) errorMsg = page.locator('[data-test="error"]')
-  await expect(page.locator('[data-test="login-button"]')).not.toBeVisible(addExpectOptions)
-  await expect(page).toHaveURL(/inventory\.html/, addExpectOptions)
-  await expect(errorMsg).toBeHidden(addExpectOptions)
-  await page.getByRole("button", { name: "Open Menu" }).click()
-  await expect(page.locator('[data-test="logout-sidebar-link"]')).toBeVisible(addExpectOptions)
+// Assertions only, no clicks: callers continue from the same page state
+export async function VerifySuccessfulLogin(page: Page, options?: { timeout?: number }) {
+  await expect(page).toHaveURL(/inventory\.html/, options)
+  await expect(page.locator('[data-test="inventory-list"]')).toBeVisible(options)
 }

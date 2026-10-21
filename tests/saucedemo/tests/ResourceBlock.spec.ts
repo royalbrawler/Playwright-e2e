@@ -1,39 +1,20 @@
-import { test, expect, Page } from "@playwright/test"
-import * as loginPage from "../page-object-models/Login"
+import { test, expect } from "@playwright/test"
 
-const standard_user_credentials = { username: "standard_user", password: "secret_sauce" }
+// Already logged in: the project's storageState comes from setup/auth.setup.ts
+test("Resource (*image) block test example", async ({ page }) => {
+  await page.route("**/*", (route) =>
+    route.request().resourceType() === "image" ? route.abort() : route.continue()
+  )
 
-let page: Page
-
-test.beforeEach(async ({ browser }) => {
-  const context = await browser.newContext()
-  page = await context.newPage()
-})
-
-test.afterEach(async () => {
-  await page.close()
-})
-
-test("Resource (*image) block test example", async () => {
-  await page.route("**/*", (route) => {
-    if (route.request().resourceType() === "image") {
-      return route.abort()
-    } else {
-      route.continue()
-    }
-  })
-
-  await page.goto("/")
-  await loginPage.Login(page, standard_user_credentials)
-  await loginPage.VerifySuccessfulLogin(page)
-  await page.waitForLoadState("networkidle")
+  await page.goto("/inventory.html")
 
   await test.step("Assert all images are broken", async () => {
     const images = page.locator(".inventory_item_img img")
-    const count = await images.count()
+    await expect(images).toHaveCount(6) // guards the loop below against passing on zero images
 
-    for (let i = 0; i < count; i++) {
-      await expect(images.nth(i)).toHaveJSProperty("naturalWidth", 0)
+    for (const image of await images.all()) {
+      // complete + naturalWidth 0 = load failed; a still-loading image also has naturalWidth 0
+      await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth === 0)).toBe(true)
     }
   })
 })

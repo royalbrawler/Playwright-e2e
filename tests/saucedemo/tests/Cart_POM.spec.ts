@@ -1,6 +1,5 @@
 import test from "@playwright/test"
 import { AddProductToCart } from "../page-object-models/Products"
-import { Login } from "../page-object-models/Login"
 import {
   GoToCartPage,
   AssertProduct,
@@ -13,7 +12,6 @@ import {
 // test.use({ launchOptions: { slowMo: 500 } }) // 500ms delay between actions
 
 const deliveryInfo = { firstName: "test", lastName: "test", postalCode: "1234" }
-const standard_user_credentials = { username: "standard_user", password: "secret_sauce" }
 
 test.describe(
   "Single item order tests",
@@ -22,20 +20,19 @@ test.describe(
   },
   () => {
     test.use({ colorScheme: "dark" }) // Apply dark mode (for the browser context) for all tests in this describe block
+    // Already logged in: the project's storageState comes from setup/auth.setup.ts
 
     test("Item can be added to cart", async ({ page }) => {
-      await page.goto("/")
+      await page.goto("/inventory.html")
 
-      await Login(page, standard_user_credentials)
       const addedProduct = await AddProductToCart(page, 0) // Add first product
       await GoToCartPage(page)
       await AssertProduct(page, addedProduct.name!)
     })
 
     test("Complete workflow for product order", async ({ page }) => {
-      await page.goto("/")
+      await page.goto("/inventory.html")
 
-      await Login(page, standard_user_credentials)
       const addedProduct = await AddProductToCart(page, 0) // Add first product
       await GoToCartPage(page)
       await AssertProduct(page, addedProduct.name!)
@@ -49,11 +46,8 @@ test.describe(
       // let addedProduct: any = {}
       let addedProduct: Awaited<ReturnType<typeof AddProductToCart>> = {} as any
 
-      await page.goto("/")
+      await page.goto("/inventory.html")
 
-      await test.step("Login to the application with valid credentials", async () => {
-        await Login(page, standard_user_credentials)
-      })
       await test.step("Add product to the cart", async () => {
         addedProduct = await AddProductToCart(page, 0) // Add first product
       })
