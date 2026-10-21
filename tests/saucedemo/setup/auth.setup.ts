@@ -1,4 +1,4 @@
-import { test as setup, expect } from "@playwright/test"
+import { test as setup } from "@playwright/test"
 import { Login, VerifySuccessfulLogin } from "../page-object-models/Login"
 
 const standard_user = { username: "standard_user", password: "secret_sauce" }

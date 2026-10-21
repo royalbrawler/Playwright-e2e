@@ -7,7 +7,6 @@ export async function GoToCartPage(page: Page) {
 
 export async function AssertProduct(page: Page, heading: string) {
   const itemToCheck = page
-    //   .locator('[data-test="cart-list"]')
     .locator('[data-test="inventory-item-name"]')
     .filter({ hasText: heading })
   await expect(itemToCheck).toBeVisible()
@@ -31,10 +30,8 @@ export async function GoToSubtotalPage(
 }
 
 export async function AssertSubtotal(page: Page, expectedSubtotal: number) {
-  const subtotalLabel = page.locator('[data-test="subtotal-label"]')
-  const subtotalText = await subtotalLabel.textContent()
-  const subtotalNumber = parseFloat(subtotalText?.replace(/[^0-9.]/g, "") ?? "0")
-  expect(subtotalNumber).toBe(expectedSubtotal)
+  // Web-first assertion: retries until the label shows the expected total
+  await expect(page.locator('[data-test="subtotal-label"]')).toHaveText(`Item total: $${expectedSubtotal.toFixed(2)}`)
 }
 
 export async function CompletePurchase(page: Page) {

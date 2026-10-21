@@ -43,14 +43,10 @@ test.describe(
     })
 
     test("Complete workflow for product order - with steps", {tag: '@with-steps'}, async ({ page }) => {
-      // let addedProduct: any = {}
-      let addedProduct: Awaited<ReturnType<typeof AddProductToCart>> = {} as any
-
       await page.goto("/inventory.html")
 
-      await test.step("Add product to the cart", async () => {
-        addedProduct = await AddProductToCart(page, 0) // Add first product
-      })
+      // test.step returns its callback's value, so no outer `let` is needed
+      const addedProduct = await test.step("Add product to the cart", () => AddProductToCart(page, 0)) // Add first product
       await test.step("Verify product is added to the cart", async () => {
         await GoToCartPage(page)
         await AssertProduct(page, addedProduct.name!)
