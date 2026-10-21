@@ -43,7 +43,7 @@ export default defineConfig({
     // API tests (request fixture only, no browser)
     {
       name: 'petstore-api',
-      testDir: './tests/petstore_swagger/api-tests',
+      testDir: './tests/petstore/api',
       use: {
         baseURL: PETSTORE_URL,
         // No Content-Type here: it overrides Playwright's per-request type and breaks form/multipart (415)
@@ -66,7 +66,7 @@ export default defineConfig({
     // E2E tests on saucedemo.com using saved auth session
     {
       name: 'saucedemo-e2e',
-      testDir: './tests/saucedemo/tests',
+      testDir: './tests/saucedemo/e2e',
       use: {
         baseURL: SAUCEDEMO_URL,
         ...devices['Desktop Chrome'],
@@ -76,7 +76,7 @@ export default defineConfig({
     },
 
     // ── Template for a new site: copy, replace "newsite", add a NEWSITE_URL constant at the top,
-    //    and create tests/newsite/{setup,tests} ──
+    //    and create tests/newsite/{setup,e2e} ──
     // Drop the setup project (and storageState/dependencies) if the site needs no login.
     // {
     //   name: 'newsite-setup',
@@ -86,7 +86,7 @@ export default defineConfig({
     // },
     // {
     //   name: 'newsite-e2e',
-    //   testDir: './tests/newsite/tests',
+    //   testDir: './tests/newsite/e2e',
     //   use: {
     //     baseURL: NEWSITE_URL,
     //     ...devices['Desktop Chrome'],

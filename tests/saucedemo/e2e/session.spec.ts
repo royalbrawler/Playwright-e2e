@@ -1,5 +1,5 @@
 import { test } from "@playwright/test"
-import { VerifySuccessfulLogin, Login } from "../page-object-models/Login"
+import { VerifySuccessfulLogin, Login } from "../page-object-models/login.page"
 
 // This test uses the session saved by auth.setup.ts (configured in playwright.config.ts)
 test("load session and verify logged in state", async ({ page }) => {

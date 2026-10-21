@@ -1,6 +1,6 @@
 import test, { expect, Page } from "@playwright/test"
 
-// Example: the same flow as Cart_POM.spec.ts written without page objects - compare the two files
+// Example: the same flow as cart-pom.spec.ts written without page objects - compare the two files
 
 // test.use({ launchOptions: { slowMo: 500 } }) // 500ms delay between actions
 

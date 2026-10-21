@@ -1,6 +1,6 @@
 import test from "@playwright/test"
-import { AddProductToCart } from "../page-object-models/Products"
-import { Login } from "../page-object-models/Login"
+import { AddProductToCart } from "../page-object-models/products.page"
+import { Login } from "../page-object-models/login.page"
 import {
   GoToCartPage,
   AssertProduct,
@@ -8,7 +8,7 @@ import {
   AssertSubtotal,
   CompletePurchase,
   AssertPurchaseComplete,
-} from "../page-object-models/Cart"
+} from "../page-object-models/cart.page"
 
 // test.use({ launchOptions: { slowMo: 500 } }) // 500ms delay between actions
 

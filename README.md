@@ -8,9 +8,9 @@ Learning Playwright end-to-end testing with TypeScript.
 
 | Project | Folder | Description |
 | ------- | ------ | ----------- |
-| `petstore-api` | `tests/petstore_swagger/` | API tests against petstore.swagger.io |
+| `petstore-api` | `tests/petstore/api/` | API tests against petstore.swagger.io |
 | `saucedemo-setup` | `tests/saucedemo/setup/` | Authentication setup - saves session to `playwright/.auth/user_saucedemo.json` |
-| `saucedemo-e2e` | `tests/saucedemo/tests/` | E2E tests on saucedemo.com using saved auth session |
+| `saucedemo-e2e` | `tests/saucedemo/e2e/` | E2E tests on saucedemo.com using saved auth session |
 
 ## Getting Started
 
