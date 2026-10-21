@@ -1,5 +1,6 @@
 import test from "@playwright/test"
 import { AddProductToCart } from "../page-object-models/Products"
+import { Login } from "../page-object-models/Login"
 import {
   GoToCartPage,
   AssertProduct,
@@ -12,6 +13,7 @@ import {
 // test.use({ launchOptions: { slowMo: 500 } }) // 500ms delay between actions
 
 const deliveryInfo = { firstName: "test", lastName: "test", postalCode: "1234" }
+const standard_user_credentials = { username: "standard_user", password: "secret_sauce" }
 
 test.describe(
   "Single item order tests",
@@ -42,26 +44,34 @@ test.describe(
       await AssertPurchaseComplete(page)
     })
 
-    test("Complete workflow for product order - with steps", {tag: '@with-steps'}, async ({ page }) => {
-      await page.goto("/inventory.html")
+    // Example: the full journey as steps, starting logged out (the tests above reuse the saved session instead)
+    test.describe("Starting logged out", () => {
+      test.use({ storageState: { cookies: [], origins: [] } })
 
-      // test.step returns its callback's value, so no outer `let` is needed
-      const addedProduct = await test.step("Add product to the cart", () => AddProductToCart(page, 0)) // Add first product
-      await test.step("Verify product is added to the cart", async () => {
-        await GoToCartPage(page)
-        await AssertProduct(page, addedProduct.name!)
-      })
-      await test.step("Fill in delivery information and go to subtotal page", async () => {
-        await GoToSubtotalPage(page, deliveryInfo)
-      })
-      await test.step("Verify subtotal is correct", async () => {
-        await AssertSubtotal(page, addedProduct.price)
-      })
-      await test.step("Complete the purchase", async () => {
-        await CompletePurchase(page)
-      })
-      await test.step("Verify purchase is complete", async () => {
-        await AssertPurchaseComplete(page)
+      test("Complete workflow for product order - with steps", {tag: '@with-steps'}, async ({ page }) => {
+        await page.goto("/")
+
+        await test.step("Login to the application with valid credentials", async () => {
+          await Login(page, standard_user_credentials)
+        })
+        // test.step returns its callback's value, so no outer `let` is needed
+        const addedProduct = await test.step("Add product to the cart", () => AddProductToCart(page, 0)) // Add first product
+        await test.step("Verify product is added to the cart", async () => {
+          await GoToCartPage(page)
+          await AssertProduct(page, addedProduct.name!)
+        })
+        await test.step("Fill in delivery information and go to subtotal page", async () => {
+          await GoToSubtotalPage(page, deliveryInfo)
+        })
+        await test.step("Verify subtotal is correct", async () => {
+          await AssertSubtotal(page, addedProduct.price)
+        })
+        await test.step("Complete the purchase", async () => {
+          await CompletePurchase(page)
+        })
+        await test.step("Verify purchase is complete", async () => {
+          await AssertPurchaseComplete(page)
+        })
       })
     })
   }
