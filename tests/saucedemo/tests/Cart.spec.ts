@@ -17,7 +17,7 @@ test("Item can be added to cart", async ({ page }) => {
   const cartList = page.locator('[data-test="cart-list"]')
   const item_1 = page.locator('[data-test="inventory-item"]').first()
   const item_1_nameLocator = item_1.locator('[data-test="inventory-item-name"]')
-  const item_1_addToCartButton = item_1.getByRole("button")
+  const item_1_addToCartButton = item_1.getByRole("button", { name: "Add to cart" })
   const item_1_priceLocator = item_1.locator(".inventory_item_price")
   const checkoutButton = page.locator('[data-test="checkout"]')
   const firstNameInput = page.locator('[data-test="firstName"]')

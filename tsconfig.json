@@ -1,0 +1,8 @@
+{
+  // Editor/type-check only: Playwright transpiles tests itself and ignores most of these options
+  "compilerOptions": {
+    "types": ["node"], // TS 6+ no longer auto-includes @types/*; needed for path, __dirname, Buffer
+    "noEmit": true
+  },
+  "include": ["tests", "playwright.config.ts"]
+}

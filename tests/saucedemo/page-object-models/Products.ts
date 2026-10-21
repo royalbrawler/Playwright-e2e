@@ -6,7 +6,7 @@ export async function AddProductToCart(page: Page, productIndex: number) {
   const item_price = await product.locator(".inventory_item_price").textContent()
   const priceNumber = parseFloat(item_price?.replace(/[^0-9.]/g, "") ?? "0")
 
-  const addToCartButton = product.getByRole("button")
+  const addToCartButton = product.getByRole("button", { name: "Add to cart" })
   await addToCartButton.click()
 
   return { name: productName, price: priceNumber }
