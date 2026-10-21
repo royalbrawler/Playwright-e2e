@@ -34,3 +34,15 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      # Runs even when tests fail (that's when the report matters); allurerc.mjs sets output + single-file mode
+      - name: Generate Allure report
+        if: ${{ !cancelled() }}
+        run: npx allure generate allure-results
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30

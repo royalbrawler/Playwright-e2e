@@ -31,3 +31,17 @@ npx playwright test --project=petstore-api
 # View test report
 npx playwright show-report
 ```
+
+## Allure Report
+
+The `allure-playwright` reporter writes raw results to `allure-results/` on every run. Allure 3 (`allurerc.mjs`) turns them into a single-file report, `allure-report/index.html`, which opens directly in a browser.
+
+```bash
+# Run tests and build a fresh report (ignores results left over from earlier runs)
+npx allure run -- npx playwright test
+
+# Build a report from whatever is in allure-results/ (older runs show up as retries)
+npx allure generate allure-results
+```
+
+In CI the report is uploaded as the `allure-report` artifact, next to `playwright-report`.
