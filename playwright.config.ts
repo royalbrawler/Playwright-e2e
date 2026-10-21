@@ -63,9 +63,10 @@ export default defineConfig({
         baseURL: SAUCEDEMO_URL,
       },
     },
-    // E2E tests on saucedemo.com using saved auth session
+    // E2E tests using the saved session, once per browser. The session file is plain JSON
+    // (cookies + localStorage), so one setup run serves every browser.
     {
-      name: 'saucedemo-e2e',
+      name: 'saucedemo-e2e-chromium',
       testDir: './tests/saucedemo/e2e',
       use: {
         baseURL: SAUCEDEMO_URL,
@@ -74,26 +75,27 @@ export default defineConfig({
       },
       dependencies: ['saucedemo-setup'],
     },
-
-    // ── Template for a new site: copy, replace "newsite", add a NEWSITE_URL constant at the top,
-    //    and create tests/newsite/{setup,e2e} ──
-    // Drop the setup project (and storageState/dependencies) if the site needs no login.
-    // {
-    //   name: 'newsite-setup',
-    //   testDir: './tests/newsite/setup',
-    //   testMatch: /.*\.setup\.ts/,
-    //   use: { baseURL: NEWSITE_URL },
-    // },
-    // {
-    //   name: 'newsite-e2e',
-    //   testDir: './tests/newsite/e2e',
-    //   use: {
-    //     baseURL: NEWSITE_URL,
-    //     ...devices['Desktop Chrome'],
-    //     storageState: 'playwright/.auth/user_newsite.json',
-    //   },
-    //   dependencies: ['newsite-setup'],
-    // },
+    {
+      name: 'saucedemo-e2e-firefox',
+      testDir: './tests/saucedemo/e2e',
+      use: {
+        baseURL: SAUCEDEMO_URL,
+        ...devices['Desktop Firefox'],
+        storageState: 'playwright/.auth/user_saucedemo.json',
+      },
+      dependencies: ['saucedemo-setup'],
+    },
+    // WebKit is Safari's engine; Playwright's build is the closest to Safari you can run on Windows/Linux
+    {
+      name: 'saucedemo-e2e-webkit',
+      testDir: './tests/saucedemo/e2e',
+      use: {
+        baseURL: SAUCEDEMO_URL,
+        ...devices['Desktop Safari'],
+        storageState: 'playwright/.auth/user_saucedemo.json',
+      },
+      dependencies: ['saucedemo-setup'],
+    },
 
     // {
     //   name: 'firefox',

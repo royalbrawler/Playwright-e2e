@@ -14,17 +14,19 @@ test.describe("Tests with inline session setup", () => {
   test.use({ storageState: { cookies: [], origins: [] } }) // start logged out, ignore the project's session
 
   const standard_user = { username: "standard_user", password: "secret_sauce" }
-  const authFile = "playwright/.auth/user_inline_example.json"
+  // One file per project: every browser project runs this file in parallel and would overwrite a shared one
+  const authFile = (projectName: string) => `playwright/.auth/user_inline_example_${projectName}.json`
 
-  test("authenticate and save session", async ({ page }) => {
+  test("authenticate and save session", async ({ page }, testInfo) => {
     await page.goto("/")
     await Login(page, standard_user)
     await VerifySuccessfulLogin(page)
-    await page.context().storageState({ path: authFile })
+    await page.context().storageState({ path: authFile(testInfo.project.name) })
   })
 
   test.describe("Using saved session", () => {
-    test.use({ storageState: authFile })
+    // A fixture function instead of a fixed value, so the path can use the project name at run time
+    test.use({ storageState: async ({}, use, testInfo) => use(authFile(testInfo.project.name)) })
 
     test("load session and verify logged in state", async ({ page }) => {
       await page.goto("/inventory.html")
